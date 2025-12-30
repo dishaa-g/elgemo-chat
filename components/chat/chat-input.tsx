@@ -8,7 +8,7 @@ import { Button } from "@/components/ui/button"
 import { Textarea } from "@/components/ui/textarea"
 import dynamic from "next/dynamic"
 
-const Picker = dynamic(() => import("@emoji-mart/react"), { ssr: false })
+const EmojiPicker = dynamic(() => import("emoji-picker-react"), { ssr: false })
 
 interface ChatInputProps {
   currentRoom: string
@@ -39,12 +39,12 @@ export function ChatInput({ currentRoom, onSend }: ChatInputProps) {
       <div className="max-w-4xl mx-auto relative">
         {showEmoji && (
           <div className="absolute bottom-full right-0 mb-4 z-50">
-            <Picker
-              data={async () => (await fetch("https://cdn.jsdelivr.net/npm/@emoji-mart/data")).json()}
-              onEmojiSelect={(emoji: any) => {
-                setContent((prev) => prev + emoji.native)
+            <EmojiPicker
+              onEmojiClick={(emojiData) => {
+                setContent((prev) => prev + emojiData.emoji)
                 setShowEmoji(false)
               }}
+              autoFocusSearch={false}
               theme="light"
             />
           </div>
