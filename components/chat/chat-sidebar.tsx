@@ -1,19 +1,26 @@
-"use client"
+// components/chat/chat-sidebar.tsx
+"use client";
 
-import { ScrollArea } from "@/components/ui/scroll-area"
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
-import { Button } from "@/components/ui/button"
-import { Hash, LogOut, Plus, MessageSquare } from "lucide-react"
+import { ScrollArea } from "@/components/ui/scroll-area";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import { Button } from "@/components/ui/button";
+import { Hash, LogOut, Plus, MessageSquare } from "lucide-react";
 
 interface ChatSidebarProps {
-  user: any
-  rooms: string[]
-  currentRoom: string
-  setCurrentRoom: (room: string) => void
-  logout: () => void
+  user: any;
+  rooms: string[];
+  currentRoom: string;
+  onRoomChange: (room: string) => void;
+  onLogout: () => void;
 }
 
-export function ChatSidebar({ user, rooms, currentRoom, setCurrentRoom, logout }: ChatSidebarProps) {
+export function ChatSidebar({
+  user,
+  rooms,
+  currentRoom,
+  onRoomChange,
+  onLogout,
+}: ChatSidebarProps) {
   return (
     <div className="hidden md:flex w-72 flex-col border-r bg-muted/10">
       <div className="p-6 border-b flex items-center justify-between">
@@ -26,7 +33,7 @@ export function ChatSidebar({ user, rooms, currentRoom, setCurrentRoom, logout }
         <Button
           variant="ghost"
           size="icon"
-          onClick={logout}
+          onClick={onLogout}
           className="h-8 w-8 text-muted-foreground hover:text-destructive"
         >
           <LogOut className="h-4 w-4" />
@@ -37,11 +44,18 @@ export function ChatSidebar({ user, rooms, currentRoom, setCurrentRoom, logout }
         <div className="p-4 space-y-6">
           <div className="px-2">
             <div className="flex items-center justify-between mb-3">
-              <h2 className="text-[11px] font-bold text-muted-foreground uppercase tracking-[0.1em]">Channels</h2>
-              <Button variant="ghost" size="icon" className="h-5 w-5 text-muted-foreground">
+              <h2 className="text-[11px] font-bold text-muted-foreground uppercase tracking-[0.1em]">
+                Channels
+              </h2>
+              <Button
+                variant="ghost"
+                size="icon"
+                className="h-5 w-5 text-muted-foreground"
+              >
                 <Plus className="h-3 w-3" />
               </Button>
             </div>
+
             <div className="space-y-0.5">
               {rooms.map((room) => (
                 <Button
@@ -52,10 +66,14 @@ export function ChatSidebar({ user, rooms, currentRoom, setCurrentRoom, logout }
                       ? "bg-primary/5 text-primary font-semibold border-l-2 border-primary rounded-l-none"
                       : "text-muted-foreground hover:text-foreground"
                   }`}
-                  onClick={() => setCurrentRoom(room)}
+                  onClick={() => onRoomChange(room)}
                 >
                   <Hash
-                    className={`mr-2 h-3.5 w-3.5 ${currentRoom === room ? "text-primary" : "text-muted-foreground/50"}`}
+                    className={`mr-2 h-3.5 w-3.5 ${
+                      currentRoom === room
+                        ? "text-primary"
+                        : "text-muted-foreground/50"
+                    }`}
                   />
                   <span className="text-sm tracking-tight">{room}</span>
                 </Button>
@@ -93,11 +111,16 @@ export function ChatSidebar({ user, rooms, currentRoom, setCurrentRoom, logout }
           </Avatar>
           <span className="absolute bottom-0 right-0 h-3 w-3 rounded-full border-2 border-background bg-emerald-500" />
         </div>
+
         <div className="flex-1 overflow-hidden">
-          <p className="text-sm font-bold tracking-tight truncate">{user?.username}</p>
-          <p className="text-[10px] text-muted-foreground truncate uppercase tracking-tighter">Active Now</p>
+          <p className="text-sm font-bold tracking-tight truncate">
+            {user?.username}
+          </p>
+          <p className="text-[10px] text-muted-foreground truncate uppercase tracking-tighter">
+            Active Now
+          </p>
         </div>
       </div>
     </div>
-  )
+  );
 }

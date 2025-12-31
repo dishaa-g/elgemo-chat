@@ -11,16 +11,17 @@ export const useSocket = () => {
 
     // Auto-detect protocol
     const protocol = window.location.protocol === "https:" ? "wss" : "ws"
-    const host = process.env.NEXT_PUBLIC_SOCKET_HOST || window.location.hostname
-    const port = process.env.NEXT_PUBLIC_SOCKET_PORT || "3001"
+const host = process.env.NEXT_PUBLIC_SOCKET_HOST ?? "localhost";
+const port = process.env.NEXT_PUBLIC_SOCKET_PORT ?? "3001";
+const socketUrl = host.startsWith("http") ? host : `http://${host}:${port}`;
 
-    const socketUrl = `${protocol}://${host}:${port}`
 
     const socketInstance = io(socketUrl, {
       secure: protocol === "wss",
       reconnectionAttempts: 5,
       reconnectionDelay: 1000,
     })
+io(socketUrl, { transports: ["polling", "websocket"], withCredentials: true });
 
     socketInstance.on("connect", () => {
       console.log("[socket] connected:", socketUrl)
